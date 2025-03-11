@@ -1,0 +1,424 @@
+<!DOCTYPE html> 
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact avec vidéo et audio de fond</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* Style pour la vidéo de fond */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+        }
+
+        .wsprime-container {
+            position: relative; /* Important pour aligner les badges par rapport à cet élément */
+            font-size: 40px;
+            font-weight: bold;
+            color: black;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 30px;
+            transition: text-shadow 0.3s ease-in-out;
+        }
+        .discord-profile {
+            position: absolute;
+            left: 20px;
+            top: 20%;
+        }       
+        .transparent-box {
+            width: 60%;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.2);
+            margin: 20px auto;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .wsprime-container:hover {
+            text-shadow: 0 0 15px white, 0 0 30px white, 0 0 45px white; /* Glow blanc sur hover */
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px; /* Réduire cet écart */
+        }
+
+        .social-links button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            border: none;
+            padding: 0;
+            margin: 8px auto;
+            cursor: pointer;
+            border-radius: 50%;
+            background: transparent;
+            width: 100px;
+            height: 100px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links button:hover {
+            transform: scale(1.1);
+        }
+        h1 {
+            font-size: 22px;  /* Réduction de la taille */
+            position: absolute;
+            left: 25%;  /* Déplacement un peu plus à gauche */
+            top: 24%;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .discord-badges {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+            align-items: center;
+            position: absolute;
+            top: 35%;  /* Aligner verticalement avec .wsprime */
+            left: 58%;
+            transform: translateX(-50%);  /* Centrer horizontalement */
+        }
+
+        .badge-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .discord-badge {
+            width: 30px;
+            height: 27px;
+            transition: transform 0.3s ease;
+        }
+
+
+        .badge-tooltip {
+            position: absolute;
+            bottom: 100%; /* Place la bulle juste au-dessus du badge */
+            left: 50%; /* Aligne horizontalement */
+            transform: translateX(-50%); /* Centre la bulle par rapport au badge */
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 15px; /* Ajoute plus de padding pour s'assurer que le texte tient sur une seule ligne */
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap; /* Empêche le texte de passer à la ligne suivante */
+            text-overflow: ellipsis; /* Ajoute des points de suspension si le texte est trop long */
+            overflow: hidden; /* Cache le texte qui dépasse */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            transform: scale(0.8); /* Bulle plus petite au départ */
+        }
+
+        .badge-container:hover .badge-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1.2); /* Agrandissement de la bulle au survol */
+        }
+        .badge-container .badge-tooltip {
+            left: 10%; /* Décale les bulles vers la gauche */
+            transform: translateX(-30%); /* Centre la bulle en fonction du nouveau positionnement */
+        }
+        .social-icon {
+            width: 80px;
+            height: 80px;
+            filter: brightness(1.1);
+            transition: filter 0.3s ease;
+        }
+
+        .discord-btn .social-icon {
+            color: #1d3557;
+            text-shadow: 0 0 5px #1d3557, 0 0 10px #1d3557;
+        }
+
+        .telegram-btn .social-icon {
+            color: #0088cc;
+            text-shadow: 0 0 5px #0088cc, 0 0 10px #0088cc;
+        }
+
+        .show-number-btn .social-icon {
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+        }
+
+        .snap-btn .social-icon {
+            color: #FFD700;
+            text-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700;
+        }
+
+        .instagram-btn .social-icon {
+            color: #E1306C;
+            text-shadow: 0 0 5px #E1306C, 0 0 10px #E1306C;
+        }
+
+        .gunlols-btn .social-icon {
+            color: #50036e;
+            text-shadow: 0 0 5px #50036e, 0 0 10px #50036e;
+        }
+
+        .tiktok-btn .social-icon {
+            color: #000000;
+            text-shadow: 0 0 5px #000000, 0 0 10px #000000;
+        }
+
+        .spotify-btn .social-icon {
+            color: #1DB954;
+            text-shadow: 0 0 5px #1DB954, 0 0 10px #1DB954;
+        }
+
+        .social-links button:hover .social-icon {
+            filter: brightness(1.3);
+        }
+
+        a {
+            display: inline-block;
+            font-size: 18px;
+            padding: 12px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            background: linear-gradient(45deg, #ff0000, #000000);
+            transition: background 1.5s ease, transform 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        a:hover {
+            background: linear-gradient(45deg, #000000, #ff0000);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+
+        .discord-profile img {
+            position: inherit;
+            width: 100px;
+            height: 100px;
+            left: 100000%;
+        }
+        .wsprimetext {
+            font-size: 0px; /* Augmenter la taille ici */
+            color: white; /* Vous pouvez changer la couleur selon vos besoins */
+            font-weight: bold;
+        }
+
+
+        .telegram-profile {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .telegram-profile img {
+            width: 200px;
+            height: 200px;
+        }
+        .social-icon {
+            width: 80px;
+            height: 80px;
+            filter: brightness(1.1);
+        }
+
+        .show-number-btn .social-icon {
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+        }
+
+        .phone-number {
+            display: none;
+            font-size: 25px;
+            margin-top: 20px;
+            color: #00ff00;
+        }
+
+        .phone-number.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Vidéo en arrière-plan -->
+    <video loop autoplay class="video-background" id="background-video">
+        <source src="image/video.mp4" type="video/mp4">
+    </video>
+    <audio src="image/song.mp3"></audio>
+
+
+
+    <div class="container">
+        <div class="wsprime-container">@wsprime</div>
+        <div class="transparent-box">
+            <div class="discord-profile">
+                <img src="image/discord profil.gif" alt="Profil Discord">
+
+            </div>
+            <h1>.wsprime</h1>
+        </div>
+
+        <div class="discord-badges">
+            <div class="badge-container">
+                <img src="image/opal.png" alt="Badge Spécial" class="discord-badge special">
+                <span class="badge-tooltip">Opal nitro badge</span>
+            </div>
+            <div class="badge-container">
+                <img src="image/boost.png" alt="Badge Boost" class="discord-badge special">
+                <span class="badge-tooltip">Badge Boost</span>
+            </div>
+            <div class="badge-container">
+                <img src="image/early.png" alt="Badge Early Supporter" class="discord-badge">
+                <span class="badge-tooltip">Early Supporter</span>
+            </div>
+            <div class="badge-container">
+                <img src="image/staff.png" alt="Badge Staff" class="discord-badge special">
+                <span class="badge-tooltip">Badge Staff</span>
+            </div>
+            <div class="badge-container">
+                <img src="image/BUG.png" alt="Badge Bug Hunter" class="discord-badge special">
+                <span class="badge-tooltip">Bug Hunter</span>
+            </div>
+            <div class="badge-container">
+                <img src="image/event.png" alt="Badge Event" class="discord-badge special">
+                <span class="badge-tooltip">Badge Event</span>
+            </div>
+        </div>
+        
+
+        <div class="social-links">
+            <button class="discord-btn" onclick="toggleDiscordProfile()">
+                <i class="fab fa-discord social-icon"></i>
+            </button>
+            <button class="telegram-btn" onclick="toggleTelegramProfile()">
+                <i class="fab fa-telegram-plane social-icon"></i>
+            </button>
+            <button class="show-number-btn" onclick="showPhoneNumber()">
+                <i class="fas fa-phone social-icon"></i>
+            </button>
+            <button class="spotify-btn" onclick="redirectSpotify()">
+                <i class="fab fa-spotify social-icon"></i>
+            </button>
+            <button class="snap-btn" onclick="redirectSnap()">
+                <i class="fab fa-snapchat social-icon"></i>
+            </button>
+            <button class="instagram-btn" onclick="redirectInsta()">
+                <i class="fab fa-instagram social-icon"></i>
+            </button>
+            <button class="gunlols-btn" onclick="redirectGunlol()">
+                <i class="fas fa-bullseye social-icon"></i>
+            </button>
+            <button class="tiktok-btn" onclick="redirectTiktok()">
+                <i class="fab fa-tiktok social-icon"></i>
+            </button>
+        </div>
+        
+        <div id="phone-number" class="phone-number">07 56 95 86 19</div>
+
+        <div id="telegram-profile" class="telegram-profile">
+            <img src="image/telegram.png" alt="Profil Telegram">
+        </div>
+    </div>
+    
+    <script>
+        // Fonction pour afficher ou masquer l'image du profil Discord
+        function toggleDiscordProfile() {
+            var discordProfile = document.getElementById('discord-profile');
+            if (discordProfile.style.display === 'none' || discordProfile.style.display === '') {
+                discordProfile.style.display = 'block';
+            } else {
+                discordProfile.style.display = 'none';
+            }
+        }
+        
+        // Fonction pour afficher ou masquer l'image du profil Telegram
+        function toggleTelegramProfile() {
+            var telegramProfile = document.getElementById('telegram-profile');
+            if (telegramProfile.style.display === 'none' || telegramProfile.style.display === '') {
+                telegramProfile.style.display = 'block';
+            } else {
+                telegramProfile.style.display = 'none';
+            }
+        }
+
+        function redirectSpotify() {
+            window.open("https://open.spotify.com/intl-fr/artist/51IIEUubMmZPCLqgGCSvgn", "_blank");
+        }
+
+        function redirectInsta() {
+            window.open("https://www.instagram.com/a555.tlc/", "_blank");
+        }
+
+        function redirectGunlol() {
+            window.open("https://guns.lol/wsprime", "_blank");
+        }
+
+        function redirectSnap() {
+            window.open("https://snapchat.com/t/I1uGVulP", "_blank");
+        }
+
+        function redirectTiktok() {
+            window.open("https://www.tiktok.com/@a555.tlc", "_blank");
+        }
+
+        function showPhoneNumber() {
+            var phoneNumberDiv = document.getElementById('phone-number');
+            if (phoneNumberDiv.style.display === 'none' || phoneNumberDiv.style.display === '') {
+                phoneNumberDiv.style.display = 'block';
+            } else {
+                phoneNumberDiv.style.display = 'none';
+            }
+        }
+
+        // Script pour l'effet de texte dans le titre de la page avec @wsprime
+        document.addEventListener('DOMContentLoaded', function() {
+            const titleElement = "@wsprime"; // Texte que vous voulez dans le titre
+            let currentText = '';
+            let index = 0;
+
+            function typeTitle() {
+                if (index < titleElement.length) {
+                    currentText += titleElement[index];
+                    document.title = currentText;
+                    index++;
+                    setTimeout(typeTitle, 500); // Vous pouvez ajuster la vitesse ici
+                }
+            }
+
+            typeTitle();
+        });
+    </script>
+</body>
+</html>
